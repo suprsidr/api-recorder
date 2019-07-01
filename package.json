@@ -1,0 +1,20 @@
+{
+  "name": "api-recorder",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Wayne Patterson <wayne.patterson@coxautoinc.com>",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "eslint": "^6.0.1",
+    "express": "^4.17.1",
+    "lowdb": "^1.0.0",
+    "node-fetch": "^2.6.0"
+  }
+}
