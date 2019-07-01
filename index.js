@@ -47,5 +47,5 @@ function forwardRequest(req, res) {
 }
 
 app.get('*', forwardRequest);
-const port = process.env.port || 3080;
+const port = process.env.APP_PORT || 3080;
 app.listen(port);
