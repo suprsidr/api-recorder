@@ -4,6 +4,7 @@ cors = require('cors');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
@@ -14,6 +15,8 @@ db.defaults({ routes: [] })
 const app = express();
 
 app.use(cors());
+
+app.use(bodyParser.json());
 
 const forwardBaseUrl = process.env.FORWARD_BASE_URL;
 
@@ -29,13 +32,19 @@ function forwardRequest(req, res) {
     return res.json(result[url]);
   }
 
-  fetch(`${forwardBaseUrl}${url}`, {
+  const options = {
     method,
-    body,
     headers: new fetch.Headers({
-      authorization: headers.authorization
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Authorization': headers.authorization
     })
-  })
+  }
+
+  if (body && Object.keys(body).length > 0) {
+    options.body = JSON.stringify(body);
+  }
+
+  fetch(`${forwardBaseUrl}${url}`, options)
   .then(resp => resp.json())
   .then(json => {
     db.get('routes')
@@ -47,5 +56,6 @@ function forwardRequest(req, res) {
 }
 
 app.get('*', forwardRequest);
+app.post('*', forwardRequest);
 const port = process.env.APP_PORT || 3080;
 app.listen(port);
