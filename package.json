@@ -1,10 +1,12 @@
 {
   "name": "api-recorder",
   "version": "0.1.0",
-  "description": "",
+  "description": "Record and return api calls for automation/caching",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "start:passthru": "node . --passthru"
   },
   "keywords": [],
   "author": "Wayne Patterson <wayne.patterson@coxautoinc.com>",
