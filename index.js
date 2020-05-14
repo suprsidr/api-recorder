@@ -19,6 +19,8 @@ const app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:8888' }));
 app.use(bodyParser.json());
 
+app.use(bodyParser.json());
+
 const forwardBaseUrl = process.env.FORWARD_BASE_URL;
 
 function forwardRequest(req, res) {
