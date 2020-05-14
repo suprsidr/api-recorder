@@ -23,15 +23,19 @@ const forwardBaseUrl = process.env.FORWARD_BASE_URL;
 
 function forwardRequest(req, res) {
   const { headers, body, method, url } = req;
+  let storeKey = '';
+  if (body && Object.keys(body).length > 0) {
+    storeKey = new Buffer(JSON.stringify(body).slice(0, 40)).toString('base64');
+  }
 
  if (!passThru) {
   const result = db.get('routes')
-    .find(url)
+    .find(url + storeKey)
     .value();
 
   if(result) {
     console.log('found it, returning stored value.');
-    return res.json(result[url]);
+    return res.json(result[url + storeKey]);
   }
  }
   const getHeaders = () => {
@@ -59,14 +63,14 @@ function forwardRequest(req, res) {
   .then(json => {
     if (!passThru) {
       db.get('routes')
-        .push({ [url]: json })
+        .push({ [url + storeKey]: json })
         .write();
       console.log('wrote new route to db.');
     }
     return res.json(json);
   })
   .catch(e => {
-    console.log(e);
+    // simply return an empty object for ngen
     return res.json({});
   });
 }
