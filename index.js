@@ -41,14 +41,7 @@ function forwardRequest(req, res) {
   }
  }
   const getHeaders = () => {
-    if (headers.authorization) return new fetch.Headers({
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': headers.authorization
-    });
-
-    return new fetch.Headers({
-      'Content-Type': 'application/json;charset=UTF-8'
-    })
+    return new fetch.Headers(Object.assign({}, headers));
   }
 
   const options = {
@@ -61,20 +54,19 @@ function forwardRequest(req, res) {
   }
 
   fetch(`${forwardBaseUrl}${url}`, options)
-  .then(resp => resp.json())
-  .then(json => {
-    if (!passThru) {
-      db.get('routes')
-        .push({ [url + storeKey]: json })
-        .write();
-      console.log('wrote new route to db.');
-    }
-    return res.json(json);
-  })
-  .catch(e => {
-    // simply return an empty object for ngen
-    return res.json({});
-  });
+    .then(resp => {
+      for (const parts of resp.headers.entries()) {
+        if (parts[0] === 'content-length' || parts[0] === 'content-type') {
+          res.set(parts[0], parts[1]);
+        }
+      }
+      return resp.text().then(resp => {
+        return res.end(resp);
+      })
+    })
+    .catch(e => {
+      return res.end('<h1>Error</h1>');
+    });
 }
 
 app.get('*', forwardRequest);
