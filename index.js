@@ -30,16 +30,16 @@ function forwardRequest(req, res) {
     storeKey = new Buffer(JSON.stringify(body).slice(0, 40)).toString('base64');
   }
 
- if (!passThru) {
-  const result = db.get('routes')
-    .find(url + storeKey)
-    .value();
+  if (!passThru) {
+    const result = db.get('routes')
+      .find(url + storeKey)
+      .value();
 
-  if(result) {
-    console.log('found it, returning stored value.');
-    return res.json(result[url + storeKey]);
+    if (result) {
+      console.log('found it, returning stored value.');
+      return res.json(result[url + storeKey]);
+    }
   }
- }
   const getHeaders = () => {
     if (headers.authorization) return new fetch.Headers({
       'Content-Type': 'application/json;charset=UTF-8',
@@ -61,20 +61,20 @@ function forwardRequest(req, res) {
   }
 
   fetch(`${forwardBaseUrl}${url}`, options)
-  .then(resp => resp.json())
-  .then(json => {
-    if (!passThru) {
-      db.get('routes')
-        .push({ [url + storeKey]: json })
-        .write();
-      console.log('wrote new route to db.');
-    }
-    return res.json(json);
-  })
-  .catch(e => {
-    // simply return an empty object for ngen
-    return res.json({});
-  });
+    .then(resp => resp.json())
+    .then(json => {
+      if (!passThru) {
+        db.get('routes')
+          .push({ [url + storeKey]: json })
+          .write();
+        console.log('wrote new route to db.');
+      }
+      return res.json(json);
+    })
+    .catch(e => {
+      // simply return an empty object for ngen
+      return res.json({});
+    });
 }
 
 app.get('*', forwardRequest);
