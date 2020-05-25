@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "start:passthru": "node . --passthru"
+    "start:passthru": "node . --passthru",
+    "start:proxy": "node ./proxy"
   },
   "keywords": [],
   "author": "Wayne Patterson <wayne.patterson@coxautoinc.com>",
