@@ -13,11 +13,11 @@
   "author": "Wayne Patterson <wayne.patterson@coxautoinc.com>",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "eslint": "^7.25.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "lowdb": "^1.0.0",
     "node-fetch": "^2.6.7"
   }
